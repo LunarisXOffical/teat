@@ -7,7 +7,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font imports -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght=400;500;600&family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -45,7 +45,7 @@
             <div>
                 <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
                     Express & Puter.js Sandbox
-                    <span class="text-xs font-normal px-2 py-0.5 bg-[#5865f2]/20 text-[#808cf8] border border-[#5865f2]/30 rounded-full">v2.0.0 (Discord Ready)</span>
+                    <span class="text-xs font-normal px-2 py-0.5 bg-[#5865f2]/20 text-[#808cf8] border border-[#5865f2]/30 rounded-full">v2.1.0</span>
                 </h1>
                 <p class="text-xs text-gray-400">Simulating interactive Express API with Discord endpoints</p>
             </div>
@@ -80,12 +80,17 @@
                     <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
                     <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                 </div>
-                <!-- Address Bar -->
+                <!-- Address Bar with API Settings Trigger -->
                 <div class="flex-grow max-w-md mx-4">
-                    <div class="w-full bg-[#11111b] border border-[#242435] text-xs text-gray-400 py-1 px-3 rounded-md flex items-center gap-2">
+                    <div class="w-full bg-[#11111b] border border-[#242435] text-xs text-gray-400 py-1 px-3 rounded-md flex items-center gap-2 relative">
                         <i class="fa-solid fa-lock text-emerald-500 text-[10px]"></i>
-                        <span id="browser-url" class="text-gray-200 font-medium">http://localhost:3000/</span>
-                        <i class="fa-solid fa-arrows-rotate ml-auto text-gray-500 cursor-pointer hover:text-white" onclick="reloadWebPreview()"></i>
+                        <span id="browser-url" class="text-gray-200 font-medium truncate">http://localhost:3000/api/discord</span>
+                        <div class="ml-auto flex items-center gap-2.5">
+                            <button onclick="openApiKeyModal()" title="Simulator API Keys & Settings" class="hover:text-amber-400 text-gray-500 transition-colors">
+                                <i class="fa-solid fa-gear"></i>
+                            </button>
+                            <i class="fa-solid fa-arrows-rotate text-gray-500 cursor-pointer hover:text-white" onclick="reloadWebPreview()"></i>
+                        </div>
                     </div>
                 </div>
                 <!-- Interface UI Selector Buttons -->
@@ -101,9 +106,9 @@
             <!-- Web Preview Container -->
             <div class="flex-grow flex flex-col overflow-hidden relative bg-[#0e0e15]" id="preview-sandbox">
                 
-                <!-- STYLE 3: DISCORD SIMULATOR CLIENT (Default view for this update) -->
+                <!-- STYLE 3: DISCORD SIMULATOR CLIENT (Default view) -->
                 <div id="discord-client-ui" class="flex-grow flex bg-[#313338] text-[#dbdee1] overflow-hidden select-none">
-                    <!-- Guild Sidebar (Guild logo placeholder) -->
+                    <!-- Guild Sidebar -->
                     <div class="w-16 bg-[#1e1f22] flex flex-col items-center py-3 gap-2 shrink-0">
                         <div class="w-12 h-12 rounded-[24px] bg-[#5865f2] text-white flex items-center justify-center font-bold text-lg hover:rounded-[16px] transition-all cursor-pointer relative group">
                             <span class="absolute left-0 w-1 h-5 bg-white rounded-r-md -ml-3 group-hover:block hidden"></span>
@@ -116,34 +121,35 @@
                     </div>
 
                     <!-- Channel Sidebar -->
-                    <div class="w-48 bg-[#2b2d31] flex flex-col shrink-0 text-sm">
+                    <div class="w-48 bg-[#2b2d31] flex flex-col shrink-0 text-sm font-sans">
                         <div class="px-3 py-3 border-b border-[#1f2023] font-bold text-white tracking-wide text-xs flex justify-between items-center shrink-0">
-                            <span>MY DISCORD SERVER</span>
+                            <span class="truncate">MY DISCORD BOT LAB</span>
                             <i class="fa-solid fa-chevron-down text-gray-400"></i>
                         </div>
                         <div class="flex-grow overflow-y-auto px-2 py-3 space-y-2">
                             <div class="text-[11px] font-bold tracking-wider text-[#949ba4] uppercase px-2 mb-1">Text Channels</div>
                             <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-[#949ba4] hover:bg-[#35373c] hover:text-[#dbdee1] cursor-pointer">
-                                <span class="text-lg text-gray-500">#</span> general
+                                <span class="text-lg text-gray-500 leading-none">#</span> general
                             </div>
                             <div class="flex items-center gap-1.5 px-2 py-1.5 rounded bg-[#35373c] text-white cursor-pointer font-medium">
-                                <span class="text-lg text-gray-400">#</span> claude-bot-test
-                            </div>
-                            <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-[#949ba4] hover:bg-[#35373c] hover:text-[#dbdee1] cursor-pointer">
-                                <span class="text-lg text-gray-500">#</span> api-logs
+                                <span class="text-lg text-gray-400 leading-none">#</span> claude-bot-test
                             </div>
 
-                            <!-- NEW: Quick Nav to Docs in the Sidebar -->
+                            <!-- Developer Links in Sidebar -->
                             <div class="text-[11px] font-bold tracking-wider text-[#949ba4] uppercase px-2 mt-4 mb-1">Developer Links</div>
                             <div onclick="openDocsFromDiscord()" class="flex items-center gap-2 px-2.5 py-2 rounded bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 hover:text-white cursor-pointer border border-indigo-500/20 font-medium text-xs transition-all">
                                 <i class="fa-solid fa-file-code text-[#808cf8]"></i>
                                 <span>📚 View Bot Docs</span>
                             </div>
+                            <div onclick="openApiKeyModal()" class="flex items-center gap-2 px-2.5 py-2 rounded bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 hover:text-white cursor-pointer border border-amber-500/20 font-medium text-xs transition-all">
+                                <i class="fa-solid fa-gear text-amber-400"></i>
+                                <span>⚙️ Custom API Key</span>
+                            </div>
                         </div>
                         <!-- Bot Profile Panel -->
                         <div class="bg-[#232428] p-2 flex items-center gap-2 shrink-0 border-t border-[#1f2023]">
                             <div class="relative">
-                                <div class="w-8 h-8 rounded-full bg-[#3b82f6] flex items-center justify-center text-white text-xs font-bold font-mono">U</div>
+                                <div class="w-8 h-8 rounded-full bg-[#3e3f45] flex items-center justify-center text-white text-xs font-bold font-mono">U</div>
                                 <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-500 ring-2 ring-[#232428]"></span>
                             </div>
                             <div class="overflow-hidden">
@@ -158,20 +164,20 @@
                         <!-- Top bar -->
                         <div class="px-4 py-3 border-b border-[#1f2023] flex items-center justify-between gap-2 text-white font-bold text-sm shrink-0">
                             <div class="flex items-center gap-2 overflow-hidden">
-                                <span class="text-lg text-gray-400">#</span>
+                                <span class="text-lg text-gray-400 leading-none">#</span>
                                 <span class="truncate">claude-bot-test</span>
                                 <span class="h-4 w-[1px] bg-gray-600 mx-2 shrink-0"></span>
                                 <span class="text-xs font-normal text-[#949ba4] truncate">Testing local bot api route `/api/discord`</span>
                             </div>
-                            <!-- NEW: Go to Docs Button inside Topbar -->
-                            <button onclick="openDocsFromDiscord()" class="px-3 py-1.5 bg-[#23a55a] hover:bg-[#1a7f43] text-white text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all shadow-md shrink-0 animate-pulse hover:animate-none">
+                            <!-- Docs Button inside Topbar -->
+                            <button onclick="openDocsFromDiscord()" class="px-3 py-1.5 bg-[#23a55a] hover:bg-[#1a7f43] text-white text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all shadow-md shrink-0">
                                 <i class="fa-solid fa-book-open"></i>
                                 <span class="hidden md:inline">Bot Code & Docs</span>
                             </button>
                         </div>
 
                         <!-- Chat Messages -->
-                        <div id="discord-messages" class="flex-grow overflow-y-auto p-4 space-y-4">
+                        <div id="discord-messages" class="flex-grow overflow-y-auto p-4 space-y-4 font-sans">
                             <!-- Standard Welcome Msg -->
                             <div class="flex gap-4 items-start">
                                 <div class="w-10 h-10 rounded-full bg-[#5865f2] text-white flex items-center justify-center text-sm font-bold shrink-0 shadow-sm">
@@ -186,12 +192,12 @@
                                     <p class="text-sm mt-1 text-[#dbdee1] leading-relaxed">
                                         Hello! I am connected to your live Express simulation running on <code class="bg-[#2b2d31] text-[#e3e5e8] px-1.5 py-0.5 rounded font-mono text-xs">http://localhost:3000/api/discord</code>.
                                     </p>
-                                    <div class="mt-2 p-3 bg-[#2b2d31] rounded border-l-4 border-[#5865f2] max-w-md">
-                                        <div class="text-xs font-bold text-gray-300 flex items-center gap-1.5">
+                                    <div class="mt-2 p-3 bg-[#2b2d31] rounded border-l-4 border-[#5865f2] max-w-md text-xs">
+                                        <div class="font-bold text-gray-300 flex items-center gap-1.5">
                                             <i class="fa-solid fa-circle-info text-[#5865f2]"></i> Discord bot specifications:
                                         </div>
-                                        <p class="text-xs mt-1 text-gray-400">
-                                            All incoming inputs generate API calls with Discord limits in mind. Responses are truncated automatically to under 2000 characters.
+                                        <p class="mt-1 text-gray-400">
+                                            All incoming inputs generate API calls. If you get a 403 error on GitHub or locally, click the ⚙️ settings gear in the address bar to supply your own Google Gemini Key!
                                         </p>
                                     </div>
                                 </div>
@@ -234,28 +240,28 @@
                     
                     <div id="chat-retro" class="flex-grow overflow-y-auto border border-[#333] p-4 bg-[#0a0a0a] rounded mb-4 flex flex-col gap-2 min-h-[250px] text-sm">
                         <div class="msg bot text-[#43b581]">
-                            <b>claude:</b> Hello! This is a simulation of the server client using the Puter SDK to access Claude 4.7 Opus. Type your question below to begin!
+                            <b>claude:</b> Hello! This is a simulation of the server client using the Puter SDK to access Claude 4.7. Type your question below to begin!
                         </div>
                     </div>
                     
                     <div class="flex gap-2">
                         <input id="input-retro" class="flex-grow p-3 bg-[#222] text-white border-0 outline-none focus:ring-1 focus:ring-[#5865f2] rounded text-sm placeholder-gray-500" placeholder="say something" onkeypress="handleRetroKeypress(event)">
-                        <button onclick="sendRetroMessage()" class="px-6 py-3 bg-[#5865f2] hover:bg-[#4752c4] text-white font-semibold rounded text-sm transition-colors cursor-pointer shrink-0">
+                        <button onclick="sendRetroMessage()" class="px-6 py-3 bg-[#5865f2] hover:bg-[#4752c4] text-white font-semibold rounded text-sm transition-colors cursor-pointer shrink-0 font-sans">
                             send
                         </button>
                     </div>
                 </div>
 
                 <!-- STYLE 2: PRETTIFIED MODERN CHAT -->
-                <div id="modern-client-ui" class="hidden flex-grow flex flex-col bg-[#0e0e15] text-gray-100 overflow-hidden">
+                <div id="modern-client-ui" class="hidden flex-grow flex flex-col bg-[#0e0e15] text-gray-100 overflow-hidden font-sans">
                     <!-- Modern Chat Header -->
                     <div class="px-6 py-4 bg-[#141421] border-b border-[#202032] flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#3b82f6] to-[#8b5cf6] flex items-center justify-center text-white shadow-lg">
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                         </div>
                         <div>
-                            <div class="font-bold text-sm tracking-wide text-white">Claude 4.7 Opus Pro</div>
-                            <div class="text-[11px] text-[#43b581] flex items-center gap-1 font-sans">
+                            <div class="font-bold text-sm tracking-wide text-white">Claude 4.7 Pro</div>
+                            <div class="text-[11px] text-[#43b581] flex items-center gap-1">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
                                 Puter AI Cloud Backend Active
                             </div>
@@ -270,7 +276,7 @@
                             </div>
                             <div class="bg-[#151522] border border-[#222235] p-4 rounded-2xl rounded-tl-none shadow-md">
                                 <p class="text-sm text-gray-300 leading-relaxed">
-                                    Welcome to the **Claude 4.7 Opus Simulator**! Your requests on this panel are routed to a mock backend API that replicates your Express routes natively inside this browser container. Try asking me complex questions or requests!
+                                    Welcome to the **Claude 4.7 Simulator**! Your requests on this panel are routed to a mock backend API that replicates your Express routes natively inside this browser container. Try asking me complex questions or requests!
                                 </p>
                             </div>
                         </div>
@@ -279,7 +285,7 @@
                     <!-- Input Area -->
                     <div class="p-4 bg-[#141421] border-t border-[#202032]">
                         <div class="flex items-center bg-[#0d0d14] border border-[#24243a] rounded-xl focus-within:border-[#8b5cf6] transition-colors p-2">
-                            <input id="input-modern" class="flex-grow bg-transparent text-gray-100 outline-none text-sm px-3 py-2" placeholder="Ask Claude Opus anything..." onkeypress="handleModernKeypress(event)">
+                            <input id="input-modern" class="flex-grow bg-transparent text-gray-100 outline-none text-sm px-3 py-2" placeholder="Ask Claude anything..." onkeypress="handleModernKeypress(event)">
                             <button onclick="sendModernMessage()" class="p-3 bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 rounded-lg text-white font-medium text-xs transition-opacity shadow-md flex items-center gap-2">
                                 <span>Send</span>
                                 <i class="fa-solid fa-paper-plane text-[10px]"></i>
@@ -369,7 +375,7 @@ app.<span class="text-[#61afef]">post</span>(<span class="text-emerald-400">"/ap
             <span class="text-pink-400">return</span> res.<span class="text-[#61afef]">status</span>(<span class="text-amber-400">400</span>).<span class="text-[#61afef]">json</span>({ error: <span class="text-emerald-400">"Missing content in JSON body"</span> });
         }
 
-        <span class="text-gray-500">// Route prompt to Puter AI using the elite Claude 4.7 engine model</span>
+        <span class="text-gray-500">// Route prompt to Puter AI using the elite Claude engine model</span>
         <span class="text-pink-400">const</span> aiResponse = <span class="text-pink-400">await</span> puter.ai.<span class="text-[#61afef]">chat</span>(userMessage, {
             model: <span class="text-emerald-400">"anthropic/claude-opus-4-7"</span>
         });
@@ -405,11 +411,28 @@ app.<span class="text-[#61afef]">listen</span>(<span class="text-amber-400">3000
 
                 <!-- DISCORD BOT INTERACTION DOCS VIEW -->
                 <div id="tab-docs" class="absolute inset-0 hidden overflow-y-auto bg-[#0a0a10] p-6 text-sm">
+                    <!-- NEW NODE.JS SERVER-SIDE WARNING CALLOUT -->
+                    <div class="bg-amber-500/10 border border-amber-500/30 p-4 rounded-lg mb-6">
+                        <h4 class="text-amber-400 font-bold flex items-center gap-2 text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-triangle-exclamation"></i> CRITICAL: Running Puter in Node.js Backend
+                        </h4>
+                        <p class="text-gray-300 text-xs mt-1.5 leading-relaxed">
+                            Puter.js uses automatic browser popups for keyless login in frontend apps. 
+                            Because a **Node.js server** has no browser, you <strong>must explicitly authenticate</strong> using an API token when running your bot locally or on GitHub/VPS!
+                        </p>
+                        <div class="mt-3 text-xs space-y-1.5 text-gray-400">
+                            <div>1. Go to <a href="https://puter.com" target="_blank" class="text-indigo-400 underline hover:text-indigo-300">Puter.com</a> and sign in.</div>
+                            <div>2. Open the console (F12) on Puter.com, type <code class="bg-gray-800 text-amber-300 px-1 py-0.5 rounded font-mono">puter.authToken</code>, and hit Enter.</div>
+                            <div>3. Copy the string token and load it into your backend environment as an environment variable:</div>
+                            <pre class="bg-[#12121d] p-2 rounded text-indigo-300 font-mono text-[11px] mt-1">PUTER_AUTH_TOKEN=your_copied_token_here</pre>
+                        </div>
+                    </div>
+
                     <h3 class="text-white font-bold text-lg mb-2 flex items-center gap-2">
                         <i class="fa-solid fa-circle-nodes text-[#5865f2]"></i> Connect Your Real Discord Bot
                     </h3>
                     <p class="text-gray-400 text-xs mb-6 leading-relaxed">
-                        Your server runs on port <code class="bg-[#1e1e2f] text-pink-400 px-1 rounded font-mono">3000</code>. Below are copy-paste template scripts for JavaScript or Python to instantly plug your bot with this Express backend.
+                        Below are correct code configurations for initializing and routing requests inside a real server environment. Notice how we use the <code class="bg-[#1e1e2f] text-pink-400 px-1 rounded font-mono">init</code> initializer function from `@heyputer/puter.js/src/init.cjs` to consume your auth token securely!
                     </p>
 
                     <!-- Language Selection Tabs inside docs -->
@@ -421,15 +444,19 @@ app.<span class="text-[#61afef]">listen</span>(<span class="text-amber-400">3000
                     <!-- JS Code Block -->
                     <div id="doc-js-content" class="space-y-3">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs text-slate-400 font-mono">Requires: npm install discord.js axios</span>
-                            <button onclick="copyDocCode('js-code-box')" class="text-xs text-[#808cf8] hover:underline flex items-center gap-1">
+                            <span class="text-xs text-slate-400 font-mono">Requires: npm install discord.js axios @heyputer/puter.js</span>
+                            <button onclick="copyDocCode('js-code-box')" class="text-xs text-[#808cf8] hover:underline flex items-center gap-1 font-sans">
                                 <i class="fa-regular fa-copy"></i> Copy Code
                             </button>
                         </div>
                         <pre id="js-code-box" class="code-font text-[11px] bg-[#141421] border border-[#212134] p-4 rounded-lg overflow-x-auto text-[#abb2bf] leading-relaxed">const { Client, GatewayIntentBits } = require('discord.js');
-const axios = require('axios');
+const { init } = require('@heyputer/puter.js/src/init.cjs');
+const express = require('express');
 
-// Initialize client with necessary Intents
+// 1. Initialize Puter with your background Token
+// Make sure you run your server with: PUTER_AUTH_TOKEN=your_token node index.js
+const puter = init(process.env.PUTER_AUTH_TOKEN);
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -439,29 +466,32 @@ const client = new Client({
 });
 
 client.on('messageCreate', async (message) => {
-    // Ignore messages from bots to prevent recursive loop hazards
     if (message.author.bot) return;
 
-    // Trigger on bot prefix command !ask
     if (message.content.startsWith('!ask ')) {
         const question = message.content.slice(5).trim();
         if (!question) return;
 
-        // Show standard Discord "typing..." indicator
         await message.channel.sendTyping();
 
         try {
-            // POST request to your newly defined /api/discord Express endpoint
-            const response = await axios.post('http://localhost:3000/api/discord', {
-                content: question
+            // Ask Claude via the authorized Puter AI module
+            const reply = await puter.ai.chat(question, {
+                model: "anthropic/claude-opus-4-7"
             });
 
-            // Deliver the direct text response
-            await message.reply(response.data.content);
+            const content = typeof reply === 'string' ? reply : reply.message.content.toString();
+
+            // Discord has a strict limit of 2000 characters
+            if (content.length > 2000) {
+                await message.reply(content.substring(0, 1995) + '...');
+            } else {
+                await message.reply(content);
+            }
 
         } catch (error) {
             console.error(error);
-            await message.reply("⚠️ Error contacting Claude API backend.");
+            await message.reply("⚠️ Puter API Gateway Error. Ensure PUTER_AUTH_TOKEN is correct.");
         }
     }
 });
@@ -473,7 +503,7 @@ client.login('YOUR_DISCORD_BOT_TOKEN');</pre>
                     <div id="doc-py-content" class="space-y-3 hidden">
                         <div class="flex justify-between items-center">
                             <span class="text-xs text-slate-400 font-mono">Requires: pip install discord.py requests</span>
-                            <button onclick="copyDocCode('py-code-box')" class="text-xs text-[#808cf8] hover:underline flex items-center gap-1">
+                            <button onclick="copyDocCode('py-code-box')" class="text-xs text-[#808cf8] hover:underline flex items-center gap-1 font-sans">
                                 <i class="fa-regular fa-copy"></i> Copy Code
                             </button>
                         </div>
@@ -491,7 +521,7 @@ async def ask(ctx, *, question: str):
     # Triggers Discord visual typing block
     async with ctx.typing():
         try:
-            # Query the Express server endpoint
+            # Query the Express server endpoint running locally
             api_url = "http://localhost:3000/api/discord"
             response = requests.post(api_url, json={"content": question})
             data = response.json()
@@ -516,9 +546,9 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')</pre>
                         <span>Intercepted HTTP Requests (Discord & Web API channels)</span>
                         <button onclick="clearNetworkLogs()" class="text-amber-400 hover:text-amber-300 transition-colors">Clear Traffic</button>
                     </div>
-                    <div id="network-logs-list" class="space-y-3">
+                    <div id="network-logs-list" class="space-y-3 font-sans">
                         <!-- Dynamic transaction records will render here -->
-                        <div class="text-center py-8 text-xs text-gray-500" id="empty-network-msg">
+                        <div class="text-center py-8 text-xs text-gray-500 font-sans" id="empty-network-msg">
                             <i class="fa-solid fa-arrow-right-left text-lg mb-2 block"></i>
                             No network requests recorded yet. Talk in the Discord Simulator on the left!
                         </div>
@@ -528,12 +558,45 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')</pre>
         </section>
     </main>
 
+    <!-- SETTINGS / CUSTOM API KEY MODAL -->
+    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden font-sans">
+        <div class="bg-[#141421] border border-[#2b2b44] rounded-xl w-full max-w-md p-6 shadow-2xl mx-4">
+            <div class="flex justify-between items-start mb-4">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-key text-amber-400 text-lg"></i>
+                    <h3 class="text-white font-bold text-base">Simulator API Settings</h3>
+                </div>
+                <button onclick="closeApiKeyModal()" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <p class="text-xs text-gray-400 leading-relaxed mb-4">
+                If you are running this sandbox outside our environment (like on GitHub Pages), the built-in model auth will fail with a 403. Enter your own key to restore cloud-connected generation, or delete the key to use Offline Fallback mode!
+            </p>
+
+            <div class="space-y-3.5">
+                <div>
+                    <label class="block text-gray-300 text-xs font-semibold mb-1.5">Google Gemini API Key</label>
+                    <input type="password" id="gemini-key-input" class="w-full bg-[#0d0d14] border border-[#24243a] focus:border-amber-400 outline-none text-xs text-white p-2.5 rounded-lg placeholder-gray-600 font-mono" placeholder="AIzaSy...">
+                </div>
+                <div class="flex justify-between items-center pt-2">
+                    <button onclick="clearSavedApiKey()" class="text-xs text-rose-400 hover:underline">Clear Saved Key</button>
+                    <div class="flex gap-2">
+                        <button onclick="closeApiKeyModal()" class="px-4 py-2 bg-[#252538] hover:bg-[#32324e] text-xs font-semibold text-gray-300 rounded-lg transition-all">Cancel</button>
+                        <button onclick="saveApiKey()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-xs font-semibold text-black rounded-lg transition-all">Save Config</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer Status -->
     <footer class="bg-[#10101a] border-t border-[#242437] py-2 px-6 flex justify-between items-center shrink-0 text-xs text-gray-500 font-sans">
         <div>Environment: <span class="text-gray-300">Live Client Integration Mode</span></div>
         <div class="flex items-center gap-2">
-            <span class="inline-block w-2 h-2 rounded-full bg-indigo-500"></span>
-            <span>API Gateway: Gemini Live Proxy</span>
+            <span class="inline-block w-2 h-2 rounded-full bg-amber-500" id="api-status-dot"></span>
+            <span id="api-status-text">Cloud Proxy Enabled</span>
         </div>
     </footer>
 
@@ -544,6 +607,27 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')</pre>
         let currentTab = 'terminal';
         let networkLogsCount = 0;
         const networkLogs = [];
+        const DEFAULT_GEMINI_KEY = "AIzaSyBwuLY6Oeblq_u0wZNk0kAAdCMcokOEgHY";
+
+        // Load saved api key
+        document.getElementById("gemini-key-input").value = localStorage.getItem('custom_gemini_api_key') || "";
+        updateStatusIndicator();
+
+        function updateStatusIndicator() {
+            const customKey = localStorage.getItem('custom_gemini_api_key');
+            const dot = document.getElementById("api-status-dot");
+            const txt = document.getElementById("api-status-text");
+            if (customKey) {
+                dot.className = "inline-block w-2 h-2 rounded-full bg-emerald-500";
+                txt.innerText = "Custom API Key Active";
+            } else if (DEFAULT_GEMINI_KEY) {
+                dot.className = "inline-block w-2 h-2 rounded-full bg-emerald-500";
+                txt.innerText = "Active: Default Gemini API Key";
+            } else {
+                dot.className = "inline-block w-2 h-2 rounded-full bg-indigo-500";
+                txt.innerText = "Active: Offline Intelligent Fallback (Keyless)";
+            }
+        }
 
         // Add a line to the terminal simulated logs
         function logToTerminal(type, text) {
@@ -578,19 +662,16 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')</pre>
 
         // Switch panel tabs
         function switchTab(tab) {
-            // Hide all tabs
             document.getElementById("tab-terminal").classList.add("hidden");
             document.getElementById("tab-code").classList.add("hidden");
             document.getElementById("tab-docs").classList.add("hidden");
             document.getElementById("tab-network").classList.add("hidden");
 
-            // Deactivate all tab buttons
             document.getElementById("tab-terminal-btn").className = "px-4 py-3 border-b-2 border-transparent text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-2";
             document.getElementById("tab-code-btn").className = "px-4 py-3 border-b-2 border-transparent text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-2";
             document.getElementById("tab-docs-btn").className = "px-4 py-3 border-b-2 border-transparent text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-2";
             document.getElementById("tab-network-btn").className = "px-4 py-3 border-b-2 border-transparent text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-2";
 
-            // Activate chosen tab
             if (tab === 'terminal') {
                 document.getElementById("tab-terminal").classList.remove("hidden");
                 document.getElementById("tab-terminal-btn").className = "px-4 py-3 border-b-2 border-[#5865f2] text-sm font-medium text-white flex items-center gap-2 bg-[#141420]/50";
@@ -603,7 +684,6 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')</pre>
             } else if (tab === 'network') {
                 document.getElementById("tab-network").classList.remove("hidden");
                 document.getElementById("tab-network-btn").className = "px-4 py-3 border-b-2 border-[#5865f2] text-sm font-medium text-white flex items-center gap-2 bg-[#141420]/50";
-                // Hide badge on open
                 document.getElementById("network-badge").classList.add("hidden");
                 document.getElementById("network-badge").innerText = "0";
                 networkLogsCount = 0;
@@ -618,7 +698,6 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')</pre>
             const discordUI = document.getElementById("discord-client-ui");
             const browserUrl = document.getElementById("browser-url");
 
-            // Hide everything first
             retroUI.classList.add("hidden");
             modernUI.classList.add("hidden");
             discordUI.classList.add("hidden");
@@ -660,6 +739,36 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')</pre>
             }
         }
 
+        // API settings modall
+        function openApiKeyModal() {
+            document.getElementById("settings-modal").classList.remove("hidden");
+            logToTerminal('system', 'Opening settings menu...');
+        }
+
+        function closeApiKeyModal() {
+            document.getElementById("settings-modal").classList.add("hidden");
+        }
+
+        function saveApiKey() {
+            const keyVal = document.getElementById("gemini-key-input").value.trim();
+            if (keyVal) {
+                localStorage.setItem('custom_gemini_api_key', keyVal);
+                logToTerminal('system', 'Custom Google Gemini API key saved successfully.');
+            } else {
+                clearSavedApiKey();
+            }
+            closeApiKeyModal();
+            updateStatusIndicator();
+        }
+
+        function clearSavedApiKey() {
+            localStorage.removeItem('custom_gemini_api_key');
+            document.getElementById("gemini-key-input").value = "";
+            logToTerminal('system', 'Custom API key removed. Falling back to offline simulator mode.');
+            closeApiKeyModal();
+            updateStatusIndicator();
+        }
+
         // Copy documentation code block to clipboard
         function copyDocCode(elementId) {
             const codeText = document.getElementById(elementId).innerText;
@@ -670,8 +779,7 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')</pre>
             document.execCommand("copy");
             document.body.removeChild(dummy);
 
-            // Pop temporary visual update to button
-            logToTerminal('system', `Copied Discord code template block to local clipboard!`);
+            logToTerminal('system', `Copied integration template to clipboard.`);
         }
 
         // Clear terminal display
@@ -679,7 +787,7 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')</pre>
             document.getElementById("terminal-logs").innerHTML = `<div><span class="text-gray-500">[SYSTEM]</span> Console buffer flushed. Server running on port 3000...</div>`;
         }
 
-        // Clear network logs dashboard list
+        // Clear network logs
         function clearNetworkLogs() {
             networkLogs.length = 0;
             document.getElementById("network-logs-list").innerHTML = `
@@ -693,9 +801,17 @@ bot.run('YOUR_DISCORD_BOT_TOKEN')</pre>
             networkLogsCount = 0;
         }
 
-        // API Call Handler - Representing "Claude 4.7 Opus via Puter API" routed to Gemini
+        // API Call Handler - Representing "Claude via Puter API" routed to Gemini
         async function fetchClaudeResponse(userMessage) {
-            const apiKey = ""; // Canvas handles injecting API keys dynamically
+            const localSavedKey = localStorage.getItem('custom_gemini_api_key');
+            const apiKey = localSavedKey || DEFAULT_GEMINI_KEY || ""; 
+            
+            // If no API key is saved, and we are not in our workspace platform context,
+            // immediately trigger offline fallback to avoid standard 403 blocks.
+            if (!apiKey) {
+                return generateLocalOfflineResponse(userMessage);
+            }
+
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
             const systemPrompt = `
@@ -712,29 +828,86 @@ Since it's a Discord chat:
                 systemInstruction: { parts: [{ text: systemPrompt }] }
             };
 
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-            if (!response.ok) {
-                throw new Error(`Puter Cloud Gateway Engine Error: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`Puter Cloud Gateway Engine Error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const reply = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!reply) {
+                    throw new Error("Empty body from Puter AI API wrapper call.");
+                }
+                return reply;
+            } catch (err) {
+                console.warn("Real Gemini connection failed. Activating intelligent offline fallback responder.", err);
+                return generateLocalOfflineResponse(userMessage);
+            }
+        }
+
+        // High fidelity offline mock generator mimicking Claude
+        function generateLocalOfflineResponse(prompt) {
+            const cleaned = prompt.toLowerCase().trim();
+            
+            let notice = "\n\n*(Offline Sandbox Mode Active)*";
+
+            if (cleaned.includes("hello") || cleaned.includes("hi ") || cleaned.includes("hey")) {
+                return `**Hello!** I'm Claude, simulated within this offline Discord sandbox. 
+
+Since you are running this playground outside our server workspace, I've activated **Sandbox Offline Mode** so your bot tests keep running smoothly without getting 403 API errors. 
+
+How can I help you program or construct your Discord bot today?` + notice;
+            }
+            
+            if (cleaned.includes("code") || cleaned.includes("javascript") || cleaned.includes("python") || cleaned.includes("write")) {
+                return `Sure! Here is a simple Node.js example showing how to query your simulated Express server bot route:
+
+\`\`\`javascript
+const axios = require('axios');
+
+async function askClaude(promptText) {
+    try {
+        const response = await axios.post('http://localhost:3000/api/discord', {
+            content: promptText
+        });
+        console.log("Claude Bot response:", response.data.content);
+    } catch (err) {
+        console.error("Bot Gateway is down:", err.message);
+    }
+}
+\`\`\`
+Let me know if you need any adjustments or helper functions!` + notice;
             }
 
-            const result = await response.json();
-            const reply = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (!reply) {
-                throw new Error("Empty body from Puter AI API wrapper call.");
+            if (cleaned.includes("help") || cleaned.includes("status")) {
+                return `### Offline Simulator Assistant
+
+Currently, I am operating offline. To re-enable genuine live AI generation:
+1. Click the **⚙️ Settings** gear icon in the Address Bar.
+2. Enter a valid **Google Gemini API Key**.
+3. Save configurations. 
+
+This will route your chatbot conversations to the live Gemini cloud processor!` + notice;
             }
-            return reply;
+
+            // General smart mock answer
+            return `I received your message: "${prompt}". 
+
+As a simulated Claude AI bot gateway, I can process inputs up to 2,000 characters and format responses into nested markdown boxes or raw list objects.
+
+To run this sandbox on GitHub with cloud-powered responses, click the **⚙️ Gear Icon** next to the address bar and enter a custom Gemini API key!` + notice;
         }
 
         // Controller simulating Express POST /api/discord
         async function runExpressPostDiscord(messageText) {
             const startTime = Date.now();
             
-            // Show server request loader overlay
             const loader = document.getElementById("client-loader");
             const loaderText = document.getElementById("loader-text");
             loader.className = "absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center flex-col transition-all z-20 animate-fade-in";
@@ -746,10 +919,8 @@ Since it's a Discord chat:
             let isSuccess = false;
 
             try {
-                // Perform model prompt resolution
                 const rawReply = await fetchClaudeResponse(messageText);
                 
-                // Truncation safeguard logic
                 let reply = rawReply;
                 let isTruncated = false;
                 if (reply.length > 2000) {
@@ -770,7 +941,6 @@ Since it's a Discord chat:
             const statusCode = isSuccess ? 200 : 500;
             logToTerminal('post', `POST /api/discord - Response status: ${statusCode} - ${duration}ms`);
 
-            // Hide loader
             loader.className = "absolute inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center flex-col transition-all z-20";
 
             // Save records inside Network log monitor
@@ -821,7 +991,6 @@ Since it's a Discord chat:
 
             networkContainer.insertBefore(logElement, networkContainer.firstChild);
 
-            // Notify Network Tab Badge
             if (currentTab !== 'network') {
                 networkLogsCount++;
                 const badge = document.getElementById("network-badge");
@@ -830,7 +999,6 @@ Since it's a Discord chat:
             }
         }
 
-        // Toggle details expansion in network monitoring tool
         function toggleDetails(id) {
             const container = document.getElementById(id);
             container.classList.toggle("hidden");
@@ -844,7 +1012,6 @@ Since it's a Discord chat:
 
             if (!text) return;
 
-            // Render message from local user profile
             const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             messagesContainer.innerHTML += `
                 <div class="flex gap-4 items-start">
@@ -864,17 +1031,13 @@ Since it's a Discord chat:
             input.value = "";
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-            // Trigger simulated Discord bot is typing status
             const typingIndicator = document.getElementById("discord-typing");
             typingIndicator.style.opacity = "1";
 
-            // Fire simulated API route
             const data = await runExpressPostDiscord(text);
 
-            // Hide typing status
             typingIndicator.style.opacity = "0";
 
-            // Render BOT reply block
             const botMessageStr = data.content || data.error;
             const formattedReply = parseMarkdown(botMessageStr);
 
@@ -889,9 +1052,9 @@ Since it's a Discord chat:
                             <span class="bg-[#5865f2] text-white font-semibold text-[9px] px-1 py-0.5 rounded uppercase leading-none tracking-wider select-none">Bot</span>
                             <span class="text-[10px] text-[#949ba4]">Today at ${timeStr}</span>
                         </div>
-                        <p class="text-sm mt-1 text-[#dbdee1] leading-relaxed whitespace-pre-line">${formattedReply}</p>
+                        <div class="text-sm mt-1 text-[#dbdee1] leading-relaxed whitespace-pre-line">${formattedReply}</div>
                         ${data.truncated ? `
-                            <div class="mt-1.5 flex items-center gap-1.5 text-xs text-amber-400">
+                            <div class="mt-1.5 flex items-center gap-1.5 text-xs text-amber-400 font-sans">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 <span>Output safely truncated under 2000 character limits for Discord bot payload.</span>
                             </div>
@@ -992,15 +1155,11 @@ Since it's a Discord chat:
             if (event.key === "Enter") sendModernMessage();
         }
 
-        // NEW: Direct trigger to open integration documents from Discord Workspace Simulator
+        // Direct trigger to open integration documents
         function openDocsFromDiscord() {
-            // Switch current active tab to 'docs' on the right panel
             switchTab('docs');
-            
-            // Log interaction event to terminal log list
             logToTerminal('system', 'User clicked Discord documentation shortcut. Opening guide...');
             
-            // Add custom visual bounce/glow effect to tab selection header
             const docsBtn = document.getElementById("tab-docs-btn");
             docsBtn.classList.add("scale-105", "text-[#808cf8]");
             setTimeout(() => {
@@ -1008,7 +1167,7 @@ Since it's a Discord chat:
             }, 1000);
         }
 
-        // Restart Server function to trigger visual log feedback
+        // Restart Server function
         function restartServer() {
             clearConsoleLogs();
             logToTerminal('system', 'Restarting virtual node context container...');
@@ -1052,7 +1211,7 @@ Since it's a Discord chat:
                 .replace(/'/g, "&#039;");
         }
 
-        // Helper: Very light Markdown-to-HTML interpreter for rich formatting in Modern/Discord mode
+        // Helper: Markdown-to-HTML interpreter
         function parseMarkdown(text) {
             return text
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -1061,7 +1220,6 @@ Since it's a Discord chat:
                 .replace(/\n/g, '<br/>');
         }
 
-        // On window startup, trigger simulated logging event sequence
         window.onload = function() {
             setTimeout(() => {
                 logToTerminal('get', 'GET /api/discord - served mock schema configurations (200 OK)');
